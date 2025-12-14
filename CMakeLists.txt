@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 3.31)
-project(interpreter_python)
+project(python_interpreter)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(interpreter_python main.cpp
+add_executable(python_interpreter main.cpp
         interpreter/Token.h
         interpreter/Lexer.cpp
         interpreter/Lexer.h
