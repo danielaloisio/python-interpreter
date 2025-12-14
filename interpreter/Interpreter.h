@@ -1,7 +1,3 @@
-//
-// Created by Daniel Aloísio on 06/12/25.
-//
-
 #ifndef INTERPRETER_H
 #define INTERPRETER_H
 

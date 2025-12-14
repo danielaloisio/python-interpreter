@@ -1,7 +1,3 @@
-//
-// Created by Daniel Aloísio on 06/12/25.
-//
-
 #ifndef RANGENODE_H
 #define RANGENODE_H
 

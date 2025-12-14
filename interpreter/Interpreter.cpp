@@ -1,7 +1,3 @@
-//
-// Created by Daniel Aloísio on 06/12/25.
-//
-
 #include "Interpreter.h"
 
 #include "Node/NumberNode.h"
@@ -27,7 +23,7 @@ Value Interpreter::executeNode(std::shared_ptr<ASTNode> node) {
         if (auto var = dynamic_pointer_cast<VariableNode>(node)) {
             auto it = variables.find(var->name);
             if (it == variables.end()) {
-                throw std::runtime_error("Variavel '" + var->name + "' nao definida");
+                throw std::runtime_error("Variable '" + var->name + "' not defined");
             }
             return it->second;
         }
@@ -47,7 +43,7 @@ Value Interpreter::executeNode(std::shared_ptr<ASTNode> node) {
                 case TokenType::GREATER: return Value(l > r);
                 case TokenType::LESS: return Value(l < r);
                 case TokenType::EQUALS: return Value(abs(l - r) < 0.0001);
-                default: throw std::runtime_error("Operador desconhecido");
+                default: throw std::runtime_error("Unknown operator");
             }
         }
 
@@ -104,7 +100,7 @@ Value Interpreter::executeNode(std::shared_ptr<ASTNode> node) {
             return Value(0.0);
         }
 
-        throw std::runtime_error("Tipo de nó desconhecido");
+        throw std::runtime_error("Unknown node type");
     }
 
 std::string Interpreter::execute(const std::vector<std::shared_ptr<ASTNode>>& ast) {
@@ -115,7 +111,7 @@ std::string Interpreter::execute(const std::vector<std::shared_ptr<ASTNode>>& as
                 executeNode(node);
             }
         } catch (const std::exception& e) {
-            return std::string("Erro de execucao: ") + e.what();
+            return std::string("Execution error: ") + e.what();
         }
 
         std::string result;

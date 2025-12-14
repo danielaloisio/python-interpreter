@@ -18,14 +18,14 @@ int main(int argc, char* argv[]) {
         try {
             File file;
             code = file.readFile(argv[1]);
-            std::cout << "=== Interpretador Python em C++ ===" << std::endl;
-            std::cout << "Arquivo: " << argv[1] << std::endl << std::endl;
+            std::cout << "*** Python interpreter in C++ ***" << std::endl;
+            std::cout << "File: " << argv[1] << std::endl << std::endl;
         } catch (const std::exception& e) {
-            std::cerr << "Erro ao ler arquivo: " << e.what() << std::endl;
+            std::cerr << "Error reading file: " << e.what() << std::endl;
             return 1;
         }
     }else {
-        std::cout << "File not found" << std::endl;
+        std::cout << "A .py file was not found." << std::endl;
         return 0;
     }
 
@@ -42,7 +42,7 @@ int main(int argc, char* argv[]) {
         std::cout << output << std::endl;
 
     } catch (const std::exception& e) {
-        std::cerr << "Erro: " << e.what() << std::endl;
+        std::cerr << "Error: " << e.what() << std::endl;
     }
 
     return 0;

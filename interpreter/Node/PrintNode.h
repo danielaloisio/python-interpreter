@@ -1,7 +1,3 @@
-//
-// Created by Daniel Aloísio on 06/12/25.
-//
-
 #ifndef PRINTNODE_H
 #define PRINTNODE_H
 

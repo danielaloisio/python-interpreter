@@ -1,7 +1,3 @@
-//
-// Created by Daniel Aloísio on 06/12/25.
-//
-
 #ifndef LEXER_H
 #define LEXER_H
 #include <string>

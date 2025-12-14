@@ -1,7 +1,3 @@
-//
-// Created by Daniel Aloísio on 06/12/25.
-//
-
 #ifndef VALUE_H
 #define VALUE_H
 
@@ -37,7 +33,6 @@ public:
 
     std::string toString() const {
         if (type == NUMBER) {
-            // Verifica se é um número inteiro
             if (numValue == static_cast<int>(numValue)) {
                 return std::to_string(static_cast<int>(numValue));
             }

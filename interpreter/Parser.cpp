@@ -1,7 +1,3 @@
-//
-// Created by Daniel Aloísio on 06/12/25.
-//
-
 #include <string>
 
 #include "Parser.h"
@@ -25,8 +21,8 @@ Token& Parser::currentToken() {
 
     void Parser::expect(TokenType type) {
         if (currentToken().type != type) {
-            throw std::runtime_error("Esperado token tipo " + std::to_string(static_cast<int>(type)) +
-                              " na linha " + std::to_string(currentToken().line));
+            throw std::runtime_error("Expected token type " + std::to_string(static_cast<int>(type)) +
+                              " on the line " + std::to_string(currentToken().line));
         }
         advance();
     }
@@ -70,7 +66,7 @@ Token& Parser::currentToken() {
             return expr;
         }
 
-        throw std::runtime_error("Token inesperado na linha " + std::to_string(currentToken().line));
+        throw std::runtime_error("Unexpected token on line " + std::to_string(currentToken().line));
     }
 
     std::shared_ptr<ASTNode> Parser::parseFactor() {
@@ -119,7 +115,7 @@ Token& Parser::currentToken() {
     }
 
     std::shared_ptr<ASTNode> Parser::parsePrint() {
-        expect(TokenType::KEYWORD); // print
+        expect(TokenType::KEYWORD);
         expect(TokenType::LPAREN);
 
         std::vector<std::shared_ptr<ASTNode>> args;
@@ -138,7 +134,7 @@ Token& Parser::currentToken() {
     }
 
     std::shared_ptr<ASTNode> Parser::parseIf() {
-        expect(TokenType::KEYWORD); // if
+        expect(TokenType::KEYWORD);
         auto condition = parseExpression();
         expect(TokenType::COLON);
         expect(TokenType::NEWLINE);
@@ -173,10 +169,10 @@ Token& Parser::currentToken() {
     }
 
     std::shared_ptr<ASTNode> Parser::parseFor() {
-        expect(TokenType::KEYWORD); // for
+        expect(TokenType::KEYWORD);
         std::string varName = currentToken().value;
         expect(TokenType::IDENTIFIER);
-        expect(TokenType::KEYWORD); // in
+        expect(TokenType::KEYWORD);
 
         auto iterable = parseExpression();
         expect(TokenType::COLON);
@@ -213,7 +209,7 @@ Token& Parser::currentToken() {
             }
         }
 
-        throw std::runtime_error("Declaração inválida na linha " + std::to_string(currentToken().line));
+        throw std::runtime_error("Invalid statement on line " + std::to_string(currentToken().line));
     }
 
 std::vector<std::shared_ptr<ASTNode>> Parser::parse() {

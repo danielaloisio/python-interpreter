@@ -1,7 +1,3 @@
-//
-// Created by Daniel Aloísio on 06/12/25.
-//
-
 #include "Lexer.h"
 
 bool Lexer::isKeyword(const std::string& word) {
@@ -26,14 +22,14 @@ Token Lexer::readNumber() {
 Token Lexer::readString(char quote) {
     std::string str;
     int startLine = line;
-    position++; // Pular aspas iniciais
+    position++;
 
     while (position < code.length() && code[position] != quote) {
         str += code[position];
         position++;
     }
 
-    position++; // Pular aspas finais
+    position++;
     return Token(TokenType::STRING, str, startLine);
 }
 
@@ -57,19 +53,16 @@ Token Lexer::readIdentifier() {
         while (position < code.length()) {
             char current = code[position];
 
-            // Ignorar espaços
             if (current == ' ' || current == '\t') {
                 position++;
                 continue;
             }
 
-            // Nova linha
             if (current == '\n') {
                 tokens.push_back(Token(TokenType::NEWLINE, "\\n", line));
                 position++;
                 line++;
 
-                // Processar indentação
                 int indent = 0;
                 while (position < code.length() && (code[position] == ' ' || code[position] == '\t')) {
                     indent += (code[position] == ' ') ? 1 : 4;
@@ -90,32 +83,27 @@ Token Lexer::readIdentifier() {
                 continue;
             }
 
-            // Comentários
             if (current == '#') {
                 while (position < code.length() && code[position] != '\n')
                     position++;
                 continue;
             }
 
-            // Números
             if (isdigit(current)) {
                 tokens.push_back(readNumber());
                 continue;
             }
 
-            // Strings
             if (current == '"' || current == '\'') {
                 tokens.push_back(readString(current));
                 continue;
             }
 
-            // Identificadores e palavras-chave
             if (isalpha(current) || current == '_') {
                 tokens.push_back(readIdentifier());
                 continue;
             }
 
-            // Operadores e pontuação
             switch (current) {
                 case '+': tokens.push_back(Token(TokenType::PLUS, "+", line)); position++; break;
                 case '-': tokens.push_back(Token(TokenType::MINUS, "-", line)); position++; break;
@@ -137,11 +125,10 @@ Token Lexer::readIdentifier() {
                 case '>': tokens.push_back(Token(TokenType::GREATER, ">", line)); position++; break;
                 case '<': tokens.push_back(Token(TokenType::LESS, "<", line)); position++; break;
                 default:
-                    throw std::runtime_error("Caractere inesperado: " + std::string(1, current) + " na linha " + std::to_string(line));
+                    throw std::runtime_error("Unexpected character: " + std::string(1, current) + " one the line " + std::to_string(line));
             }
         }
 
-        // DEDENT final
         while (indentStack.size() > 1) {
             tokens.push_back(Token(TokenType::DEDENT, "", line));
             indentStack.pop_back();
