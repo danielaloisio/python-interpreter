@@ -2,6 +2,7 @@
 #define INTERPRETER_H
 
 #include <map>
+#include <memory>
 #include <vector>
 #include "Value.h"
 #include "Node/ASTNode.h"

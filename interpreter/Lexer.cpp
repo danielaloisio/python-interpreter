@@ -1,5 +1,7 @@
 #include "Lexer.h"
 
+#include <stdexcept>
+
 bool Lexer::isKeyword(const std::string& word) {
     for (const auto& kw : keywords) {
         if (kw == word) return true;

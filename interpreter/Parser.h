@@ -1,5 +1,6 @@
 #ifndef PARSER_H
 #define PARSER_H
+#include <memory>
 #include <vector>
 #include "Token.h"
 #include "Node/ASTNode.h"
