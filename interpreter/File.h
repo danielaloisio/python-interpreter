@@ -2,12 +2,10 @@
 #define FILE_H
 
 
-
 class File {
 public:
-    static std::string readFile(const std::string& filename);
+    static std::string readFile(const std::string &filename);
 };
-
 
 
 #endif //FILE_H

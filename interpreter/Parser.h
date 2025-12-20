@@ -11,7 +11,7 @@ private:
     std::vector<Token> tokens;
     size_t position;
 
-    Token& currentToken();
+    Token &currentToken();
 
     void advance();
 
@@ -38,11 +38,11 @@ private:
     std::shared_ptr<ASTNode> parseStatement();
 
 public:
-    Parser(const std::vector<Token>& toks) : tokens(toks), position(0) {}
+    Parser(const std::vector<Token> &toks) : tokens(toks), position(0) {
+    }
 
-    std::vector<std::shared_ptr<ASTNode>> parse();
+    std::vector<std::shared_ptr<ASTNode> > parse();
 };
-
 
 
 #endif //PARSER_H

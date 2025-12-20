@@ -7,21 +7,30 @@
 class Value {
 public:
     enum Type { NUMBER, STRING, BOOLEAN };
+
     Type type;
     double numValue;
     std::string strValue;
     bool boolValue;
 
-    Value() : type(NUMBER), numValue(0), strValue(""), boolValue(false) {}
-    Value(double v) : type(NUMBER), numValue(v), strValue(""), boolValue(false) {}
-    Value(const std::string& v) : type(STRING), numValue(0), strValue(v), boolValue(false) {}
-    Value(bool v) : type(BOOLEAN), numValue(0), strValue(""), boolValue(v) {}
+    Value() : type(NUMBER), numValue(0), strValue(""), boolValue(false) {
+    }
 
-    Value(const Value& other)
+    Value(double v) : type(NUMBER), numValue(v), strValue(""), boolValue(false) {
+    }
+
+    Value(const std::string &v) : type(STRING), numValue(0), strValue(v), boolValue(false) {
+    }
+
+    Value(bool v) : type(BOOLEAN), numValue(0), strValue(""), boolValue(v) {
+    }
+
+    Value(const Value &other)
         : type(other.type), numValue(other.numValue),
-          strValue(other.strValue), boolValue(other.boolValue) {}
+          strValue(other.strValue), boolValue(other.boolValue) {
+    }
 
-    Value& operator=(const Value& other) {
+    Value &operator=(const Value &other) {
         if (this != &other) {
             type = other.type;
             numValue = other.numValue;

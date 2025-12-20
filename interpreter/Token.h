@@ -15,10 +15,12 @@ public:
     std::string value;
     int line;
 
-    Token(TokenType t, const std::string& v, int l) : type(t), value(v), line(l) {}
+    Token(TokenType t, const std::string &v, int l) : type(t), value(v), line(l) {
+    }
 
     std::string toString() const {
-        return "Token(" + std::to_string(static_cast<int>(type)) + ", " + value + ", Line " + std::to_string(line) + ")";
+        return "Token(" + std::to_string(static_cast<int>(type)) + ", " + value + ", Line " + std::to_string(line) +
+               ")";
     }
 };
 

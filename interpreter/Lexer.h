@@ -11,7 +11,7 @@ private:
     int line;
     std::vector<std::string> keywords = {"if", "else", "for", "in", "range", "print", "while", "def", "return"};
 
-    bool isKeyword(const std::string& word);
+    bool isKeyword(const std::string &word);
 
     Token readNumber();
 
@@ -20,11 +20,11 @@ private:
     Token readIdentifier();
 
 public:
-    Lexer(const std::string& sourceCode) : code(sourceCode), position(0), line(1) {}
+    Lexer(const std::string &sourceCode) : code(sourceCode), position(0), line(1) {
+    }
 
     std::vector<Token> tokenize();
 };
-
 
 
 #endif //LEXER_H

@@ -15,9 +15,8 @@ private:
     Value executeNode(std::shared_ptr<ASTNode> node);
 
 public:
-    std::string execute(const std::vector<std::shared_ptr<ASTNode>>& ast);
+    std::string execute(const std::vector<std::shared_ptr<ASTNode> > &ast);
 };
-
 
 
 #endif //INTERPRETER_H

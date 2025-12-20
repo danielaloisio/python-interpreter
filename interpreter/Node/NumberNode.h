@@ -2,11 +2,12 @@
 #define NUMBERNODE_H
 
 
-
 class NumberNode : public ASTNode {
 public:
     double value;
-    NumberNode(double v) : value(v) {}
+
+    NumberNode(double v) : value(v) {
+    }
 };
 
 

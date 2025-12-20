@@ -2,15 +2,15 @@
 #define FORNODE_H
 
 
-
 class ForNode : public ASTNode {
 public:
     std::string varName;
     std::shared_ptr<ASTNode> iterable;
-    std::vector<std::shared_ptr<ASTNode>> body;
+    std::vector<std::shared_ptr<ASTNode> > body;
 
-    ForNode(const std::string& var, std::shared_ptr<ASTNode> iter, const std::vector<std::shared_ptr<ASTNode>>& b)
-        : varName(var), iterable(iter), body(b) {}
+    ForNode(const std::string &var, std::shared_ptr<ASTNode> iter, const std::vector<std::shared_ptr<ASTNode> > &b)
+        : varName(var), iterable(iter), body(b) {
+    }
 };
 
 
