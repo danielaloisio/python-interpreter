@@ -25,8 +25,6 @@ cmake ..
 cmake --build .
 ```
 
-After building, the executable is typically placed in `build/` or `cmake-build-debug/` and may be named `python_interpreter` or `interpreter_python` depending on the CMake configuration.
-
 Running the interpreter
 -----------------------
 To run the interpreter without arguments:
