@@ -11,6 +11,8 @@
 #include "Node/StringNode.h"
 #include "Node/VariableNode.h"
 
+#include <stdexcept>
+
 Token &Parser::currentToken() {
     return tokens[position < tokens.size() ? position : tokens.size() - 1];
 }

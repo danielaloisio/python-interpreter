@@ -11,6 +11,8 @@
 #include "Node/ForNode.h"
 #include "Node/RangeNode.h"
 
+#include <stdexcept>
+
 Value Interpreter::executeNode(std::shared_ptr<ASTNode> node) {
     if (auto num = dynamic_pointer_cast<NumberNode>(node)) {
         return Value(num->value);
