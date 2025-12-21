@@ -27,16 +27,16 @@ cmake --build .
 
 Running the interpreter
 -----------------------
-To run the interpreter without arguments:
-
-```bash
-./build/python_interpreter
-```
-
-If the binary accepts a script file, run it like this:
+To run the interpreter on Linux and MacOS:
 
 ```bash
 ./build/python_interpreter path/to/script.py
+```
+
+To run the interpreter on Windows:     
+
+```bash
+./build/python_interpreter.exe path/to/script.py
 ```
 
 Example script (example.py)
