@@ -30,13 +30,15 @@ Running the interpreter
 To run the interpreter on Linux and MacOS:
 
 ```bash
-./build/python_interpreter path/to/script.py
+cd build
+./python_interpreter path/to/script.py
 ```
 
 To run the interpreter on Windows:     
 
 ```bash
-./build/python_interpreter.exe path/to/script.py
+cd build
+python_interpreter.exe path/to/script.py
 ```
 
 Example script (example.py)
@@ -44,7 +46,7 @@ Example script (example.py)
 ```
 # example.py
 x = 0
-for i in range(1, 5):
+for i in range(5):
     print(i)
 
 print("End of loop")
@@ -52,6 +54,7 @@ print("End of loop")
 
 Expected output (implementation-dependent):
 ```
+0
 1
 2
 3
