@@ -109,13 +109,26 @@ Value Interpreter::executeNode(std::shared_ptr<ASTNode> node) {
 
     if (auto forNode = dynamic_pointer_cast<ForNode>(node)) {
         if (auto range = dynamic_pointer_cast<RangeNode>(forNode->iterable)) {
-            Value endVal = executeNode(range->end);
-            int end = static_cast<int>(endVal.toNumber());
+            int start = range->start ? static_cast<int>(executeNode(range->start).toNumber()) : 0;
+            int end = static_cast<int>(executeNode(range->end).toNumber());
+            int step = range->step ? static_cast<int>(executeNode(range->step).toNumber()) : 1;
 
-            for (int i = 0; i < end; i++) {
-                variables[forNode->varName] = Value(static_cast<double>(i));
-                for (const auto &stmt: forNode->body)
-                    executeNode(stmt);
+            if (step == 0) {
+                throw std::runtime_error("range() arg 3 must not be zero");
+            }
+
+            if (step > 0) {
+                for (int i = start; i < end; i += step) {
+                    variables[forNode->varName] = Value(static_cast<double>(i));
+                    for (const auto &stmt: forNode->body)
+                        executeNode(stmt);
+                }
+            } else {
+                for (int i = start; i > end; i += step) {
+                    variables[forNode->varName] = Value(static_cast<double>(i));
+                    for (const auto &stmt: forNode->body)
+                        executeNode(stmt);
+                }
             }
         }
         return Value(0.0);

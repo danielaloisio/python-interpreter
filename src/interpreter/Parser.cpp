@@ -54,6 +54,12 @@ void Parser::skipNewlines() {
 }
 
 std::shared_ptr<ASTNode> Parser::parsePrimary() {
+    if (currentToken().type == TokenType::MINUS) {
+        advance();
+        auto operand = parsePrimary();
+        return make_shared<BinaryOpNode>(std::make_shared<NumberNode>(0), TokenType::MINUS, operand);
+    }
+
     if (currentToken().type == TokenType::NUMBER) {
         double value = stod(currentToken().value);
         advance();
@@ -75,9 +81,28 @@ std::shared_ptr<ASTNode> Parser::parsePrimary() {
     if (currentToken().type == TokenType::KEYWORD && currentToken().value == "range") {
         advance();
         expect(TokenType::LPAREN);
-        auto end = parseExpression();
+
+        std::vector<std::shared_ptr<ASTNode> > args;
+        args.push_back(parseExpression());
+        while (currentToken().type == TokenType::COMMA) {
+            advance();
+            args.push_back(parseExpression());
+        }
+
         expect(TokenType::RPAREN);
-        return std::make_shared<RangeNode>(end);
+
+        if (args.size() == 1) {
+            return std::make_shared<RangeNode>(nullptr, args[0], nullptr);
+        }
+        if (args.size() == 2) {
+            return std::make_shared<RangeNode>(args[0], args[1], nullptr);
+        }
+        if (args.size() == 3) {
+            return std::make_shared<RangeNode>(args[0], args[1], args[2]);
+        }
+
+        throw std::runtime_error("range() expects 1 to 3 arguments on line " +
+                                  std::to_string(currentToken().line));
     }
 
     if (currentToken().type == TokenType::LPAREN) {
