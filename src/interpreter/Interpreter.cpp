@@ -29,8 +29,21 @@ along with this program; if not, see
 #include "Node/IfNode.h"
 #include "Node/ForNode.h"
 #include "Node/RangeNode.h"
+#include "Node/FunctionDefNode.h"
+#include "Node/ReturnNode.h"
+#include "Node/CallNode.h"
 
 #include <stdexcept>
+
+namespace {
+    class ReturnSignal : public std::exception {
+    public:
+        Value value;
+
+        explicit ReturnSignal(Value v) : value(std::move(v)) {
+        }
+    };
+}
 
 Value Interpreter::executeNode(std::shared_ptr<ASTNode> node) {
     if (auto num = dynamic_pointer_cast<NumberNode>(node)) {
@@ -132,6 +145,58 @@ Value Interpreter::executeNode(std::shared_ptr<ASTNode> node) {
             }
         }
         return Value(0.0);
+    }
+
+    if (auto funcDef = dynamic_pointer_cast<FunctionDefNode>(node)) {
+        functions[funcDef->name] = funcDef;
+        return Value(0.0);
+    }
+
+    if (auto ret = dynamic_pointer_cast<ReturnNode>(node)) {
+        Value val = ret->value ? executeNode(ret->value) : Value(0.0);
+        throw ReturnSignal(val);
+    }
+
+    if (auto call = dynamic_pointer_cast<CallNode>(node)) {
+        auto it = functions.find(call->name);
+        if (it == functions.end()) {
+            throw std::runtime_error("Function '" + call->name + "' not defined");
+        }
+        auto funcDef = dynamic_pointer_cast<FunctionDefNode>(it->second);
+
+        if (call->arguments.size() != funcDef->params.size()) {
+            throw std::runtime_error("Function '" + call->name + "' expects " +
+                                      std::to_string(funcDef->params.size()) + " argument(s), got " +
+                                      std::to_string(call->arguments.size()));
+        }
+
+        std::vector<Value> argValues;
+        for (const auto &arg: call->arguments) {
+            argValues.push_back(executeNode(arg));
+        }
+
+        std::map<std::string, Value> callerVariables = variables;
+        std::map<std::string, Value> localVariables = variables;
+        for (size_t i = 0; i < funcDef->params.size(); i++) {
+            localVariables[funcDef->params[i]] = argValues[i];
+        }
+        variables = localVariables;
+
+        Value result(0.0);
+        try {
+            for (const auto &stmt: funcDef->body)
+                executeNode(stmt);
+        } catch (ReturnSignal &signal) {
+            result = signal.value;
+            variables = callerVariables;
+            return result;
+        } catch (...) {
+            variables = callerVariables;
+            throw;
+        }
+
+        variables = callerVariables;
+        return result;
     }
 
     throw std::runtime_error("Unknown node type");

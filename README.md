@@ -41,15 +41,33 @@ cd build
 python_interpreter.exe path/to/script.py
 ```
 
+Supported language features
+----------------------------
+- Variables, numbers, strings and arithmetic/comparison expressions (`+ - * / > < ==`, unary `-`)
+- `print(...)` with multiple comma-separated arguments
+- `if` / `else`
+- `for x in range(...)`, with the same signatures as Python:
+  - `range(end)`
+  - `range(start, end)`
+  - `range(start, end, step)` (including negative steps, e.g. counting down)
+- Functions with `def`, parameters and `return` (including recursion). Functions have their own local scope: assignments inside a function do not leak to the caller.
+
 Example script (example.py)
 ---------------------------
-```
+```python
 # example.py
 x = 0
 for i in range(5):
     print(i)
 
 print("End of loop")
+
+def factorial(n):
+    if n < 2:
+        return 1
+    return n * factorial(n - 1)
+
+print(factorial(5))
 ```
 
 Expected output (implementation-dependent):
@@ -60,6 +78,7 @@ Expected output (implementation-dependent):
 3
 4
 End of loop
+120
 ```
 
 Code structure
@@ -67,5 +86,5 @@ Code structure
 - `interpreter/Lexer.*` - tokenization
 - `interpreter/Parser.*` - AST construction
 - `interpreter/Interpreter.*` - AST execution/evaluation
-- `interpreter/Node/` - AST node definitions (AssignNode, ForNode, PrintNode, etc.)
+- `interpreter/Node/` - AST node definitions (AssignNode, ForNode, PrintNode, FunctionDefNode, ReturnNode, CallNode, etc.)
 - `interpreter/File.*` - file reading utilities

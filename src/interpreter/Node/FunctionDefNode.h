@@ -17,26 +17,21 @@ along with this program; if not, see
 */
 
 
-#ifndef INTERPRETER_H
-#define INTERPRETER_H
+#ifndef FUNCTIONDEFNODE_H
+#define FUNCTIONDEFNODE_H
 
-#include <map>
-#include <memory>
-#include <vector>
-#include "Value.h"
-#include "Node/ASTNode.h"
 
-class Interpreter {
-private:
-    std::map<std::string, Value> variables;
-    std::map<std::string, std::shared_ptr<ASTNode> > functions;
-    std::vector<std::string> output;
-
-    Value executeNode(std::shared_ptr<ASTNode> node);
-
+class FunctionDefNode : public ASTNode {
 public:
-    std::string execute(const std::vector<std::shared_ptr<ASTNode> > &ast);
+    std::string name;
+    std::vector<std::string> params;
+    std::vector<std::shared_ptr<ASTNode> > body;
+
+    FunctionDefNode(const std::string &n, const std::vector<std::string> &p,
+                     const std::vector<std::shared_ptr<ASTNode> > &b)
+        : name(n), params(p), body(b) {
+    }
 };
 
 
-#endif //INTERPRETER_H
+#endif //FUNCTIONDEFNODE_H
