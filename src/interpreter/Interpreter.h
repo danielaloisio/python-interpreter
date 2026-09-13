@@ -29,6 +29,7 @@ along with this program; if not, see
 class Interpreter {
 private:
     std::map<std::string, Value> variables;
+    std::map<std::string, std::shared_ptr<ASTNode> > functions;
     std::vector<std::string> output;
 
     Value executeNode(std::shared_ptr<ASTNode> node);

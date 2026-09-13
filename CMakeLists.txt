@@ -17,6 +17,9 @@ add_executable(python_interpreter src/main.cpp
         src/interpreter/Node/IfNode.h
         src/interpreter/Node/ForNode.h
         src/interpreter/Node/RangeNode.h
+        src/interpreter/Node/FunctionDefNode.h
+        src/interpreter/Node/ReturnNode.h
+        src/interpreter/Node/CallNode.h
         src/interpreter/Parser.cpp
         src/interpreter/Parser.h
         src/interpreter/Value.h

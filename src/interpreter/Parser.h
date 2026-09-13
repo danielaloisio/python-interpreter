@@ -54,6 +54,12 @@ private:
 
     std::shared_ptr<ASTNode> parseFor();
 
+    std::shared_ptr<ASTNode> parseDef();
+
+    std::shared_ptr<ASTNode> parseReturn();
+
+    std::shared_ptr<ASTNode> parseCall(const std::string &name);
+
     std::shared_ptr<ASTNode> parseStatement();
 
 public:

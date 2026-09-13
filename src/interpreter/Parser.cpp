@@ -22,11 +22,14 @@ along with this program; if not, see
 #include "Parser.h"
 #include "Node/AssignNode.h"
 #include "Node/BinaryOpNode.h"
+#include "Node/CallNode.h"
 #include "Node/ForNode.h"
+#include "Node/FunctionDefNode.h"
 #include "Node/IfNode.h"
 #include "Node/NumberNode.h"
 #include "Node/PrintNode.h"
 #include "Node/RangeNode.h"
+#include "Node/ReturnNode.h"
 #include "Node/StringNode.h"
 #include "Node/VariableNode.h"
 
@@ -75,6 +78,11 @@ std::shared_ptr<ASTNode> Parser::parsePrimary() {
     if (currentToken().type == TokenType::IDENTIFIER) {
         std::string name = currentToken().value;
         advance();
+
+        if (currentToken().type == TokenType::LPAREN) {
+            return parseCall(name);
+        }
+
         return std::make_shared<VariableNode>(name);
     }
 
@@ -237,11 +245,76 @@ std::shared_ptr<ASTNode> Parser::parseFor() {
     return make_shared<ForNode>(varName, iterable, body);
 }
 
+std::shared_ptr<ASTNode> Parser::parseCall(const std::string &name) {
+    expect(TokenType::LPAREN);
+
+    std::vector<std::shared_ptr<ASTNode> > args;
+    if (currentToken().type != TokenType::RPAREN) {
+        args.push_back(parseExpression());
+        while (currentToken().type == TokenType::COMMA) {
+            advance();
+            args.push_back(parseExpression());
+        }
+    }
+
+    expect(TokenType::RPAREN);
+    return make_shared<CallNode>(name, args);
+}
+
+std::shared_ptr<ASTNode> Parser::parseDef() {
+    expect(TokenType::KEYWORD);
+    std::string name = currentToken().value;
+    expect(TokenType::IDENTIFIER);
+    expect(TokenType::LPAREN);
+
+    std::vector<std::string> params;
+    if (currentToken().type != TokenType::RPAREN) {
+        params.push_back(currentToken().value);
+        expect(TokenType::IDENTIFIER);
+        while (currentToken().type == TokenType::COMMA) {
+            advance();
+            params.push_back(currentToken().value);
+            expect(TokenType::IDENTIFIER);
+        }
+    }
+
+    expect(TokenType::RPAREN);
+    expect(TokenType::COLON);
+    expect(TokenType::NEWLINE);
+    expect(TokenType::INDENT);
+
+    std::vector<std::shared_ptr<ASTNode> > body;
+    while (currentToken().type != TokenType::DEDENT && currentToken().type != TokenType::END_OF_FILE) {
+        body.push_back(parseStatement());
+        skipNewlines();
+    }
+
+    if (currentToken().type == TokenType::DEDENT)
+        advance();
+
+    return make_shared<FunctionDefNode>(name, params, body);
+}
+
+std::shared_ptr<ASTNode> Parser::parseReturn() {
+    expect(TokenType::KEYWORD);
+
+    std::shared_ptr<ASTNode> value = nullptr;
+    if (currentToken().type != TokenType::NEWLINE &&
+        currentToken().type != TokenType::DEDENT &&
+        currentToken().type != TokenType::END_OF_FILE) {
+        value = parseExpression();
+    }
+
+    return make_shared<ReturnNode>(value);
+}
+
 std::shared_ptr<ASTNode> Parser::parseStatement() {
     if (currentToken().type == TokenType::KEYWORD) {
         if (currentToken().value == "print") return parsePrint();
         if (currentToken().value == "if") return parseIf();
         if (currentToken().value == "for") return parseFor();
+        if (currentToken().value == "def") return parseDef();
+        if (currentToken().value == "return") return parseReturn();
     }
 
     if (currentToken().type == TokenType::IDENTIFIER) {
@@ -252,6 +325,10 @@ std::shared_ptr<ASTNode> Parser::parseStatement() {
             advance();
             auto value = parseExpression();
             return make_shared<AssignNode>(varName, value);
+        }
+
+        if (currentToken().type == TokenType::LPAREN) {
+            return parseCall(varName);
         }
     }
 
