@@ -23,9 +23,12 @@ along with this program; if not, see
 
 class RangeNode : public ASTNode {
 public:
+    std::shared_ptr<ASTNode> start;
     std::shared_ptr<ASTNode> end;
+    std::shared_ptr<ASTNode> step;
 
-    RangeNode(std::shared_ptr<ASTNode> e) : end(e) {
+    RangeNode(std::shared_ptr<ASTNode> s, std::shared_ptr<ASTNode> e, std::shared_ptr<ASTNode> st)
+        : start(s), end(e), step(st) {
     }
 };
 
